@@ -1,6 +1,9 @@
 var gatt;
 var service;
 
+let isStarted = false; //tracks first button press and switches button function
+let isStopped = false; //true when button is pressed a 2nd time, stops datatransmission
+
 /* Create the file in append mode
 columns (1-4): cmd, packetIndex, checksum, size
 columns (5-6): gyro-x_msb, gyro-x_lsb
@@ -39,24 +42,38 @@ function connectToESense() {
         var csv = [].slice.call(event.target.value.buffer);
         console.log(csv);
         file.write(csv.join(",")+"\n");
-        counter++;
-    if (counter > 20){c.stopNotifications();}
+    if (isStopped){c.stopNotifications();}
   });
       return c.startNotifications();
     }).catch(function(){
       console.log("Notification Error");
     });
   }
-  
+
+  function clearCsvFile(fileName){
+    require("Storage").open(fileName, "w");
+    console.log("Overwrite: " + fileName);
+  }
 
 function startUp(){
+
     connectToESense();
     g.drawString("Connected");
 }
 
-//Start the app
+//Start the app by pressing BTN1
 setWatch(() => {
-    startUp();
+    //On first button press, Bangle connects to eSense and starts sending data.
+    if (!isStarted) {
+      startUp();
+      isStarted = true;
+      console.log("BTN 1 pressed: Start up");
+    }
+    //On second button press, the data transmission is stopped. 
+    else {
+      isStopped = true;
+      console.log("BTN 1 pressed again: Stop notifications");
+    }
   }, BTN1, {
     repeat: true
   });
