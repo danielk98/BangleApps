@@ -6,6 +6,8 @@
   "license": "MIT",
   "repository": "https://github.com/espruino/BangleApps",
   "devDependencies": {
+    "@types/espruino": "^1.94.7",
+    "banglejs": "file:typescript/types",
     "eslint": "^8.14.0",
     "eslint-config-airbnb-base": "^15.0.0",
     "eslint-plugin-import": "^2.26.0",
