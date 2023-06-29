@@ -17,7 +17,6 @@ let isStopped = false; //true when button is pressed a 2nd time, stops datatrans
 let sampleRate = 25;
 let counter = 0;
 
-const sampleRate = 25;
 
 /* eSense sensor data
 columns (0-3): cmd, packetIndex, checksum, size
@@ -78,6 +77,22 @@ function setSensorConfig(service, sampleRate) {
     });
 }
 
+/**
+ * @param {BluetoothRemoteGATTService} service 
+ * @returns {Promise<void>}
+ */
+function getBatteryStatus(service) {
+  // Batter characterisic
+  return service
+    .getCharacteristic("0xFF0A")
+    .then(
+      /**
+       * @param {BluetoothRemoteGATTCharacteristic} c 
+       * @returns {DataView}
+       */
+      (c) => { return c.readValue(); }
+    );
+}
 
 /**
  * @param {BluetoothRemoteGATTService} service 
@@ -253,6 +268,25 @@ const eSenseMenu = {
       saveMagnitudes();
       E.showMenu(eSenseMenu);
     }, 2000);
+  },
+  "Show Battery" : () => {
+    E.showMessage("Waiting...");
+    getBatteryStatus(service)
+      .then((d) => {
+        const maxVoltage = 4.2;
+        let voltage = (d.buffer[3] * 256 + d.buffer[4]) / 1000;
+        let percentage = parseInt((voltage / maxVoltage) * 100);
+        console.log("Battery: " + voltage + "V");
+        E.showMessage("Battery Status is: " + percentage + "%");
+        setTimeout(() => {
+          E.showMenu(eSenseMenu);
+        }, 1000)
+      })
+      .catch((err) => {
+        console.log(err);
+        E.showAlert("No battery found")
+          .then(() => E.showMenu(eSenseMenu));
+      });
   },
   "Remove last recording" : () => {
     console.log("Removing files written at: " + startedAt);
