@@ -17,6 +17,9 @@ let isStopped = false; //true when button is pressed a 2nd time, stops datatrans
 let sampleRate = 25;
 let counter = 0;
 
+//NRF.setTxPower(4);
+//NRF.setConnectionInterval({minInterval: 20, maxInterval: 100});
+//NRF.setAdvertising({}, {interval: 20});
 
 /* eSense sensor data
 columns (0-3): cmd, packetIndex, checksum, size
@@ -110,6 +113,72 @@ function turnOffSensor(service) {
     });
 }
 
+/**
+ * @param {BluetoothRemoteGATTService} service 
+ * @returns {Promise<void>}
+ */
+function setConnectionInterval(service) {
+  return service
+    .getCharacteristic("0xFF07")
+    .then((c) => {
+      let adv_min = 625 / 0.625; //32
+      let adv_max = 750 / 0.625; //80
+      let conn_min = 90 / 1.25; //480
+      let conn_max = 110 / 1.25; //800
+      let adv_min_msb = getMSB(adv_min);    // 00
+      let adv_min_lsb = getLSB(adv_min);    // 00100000 (32)
+      let adv_max_msb = getMSB(adv_max);    // 00
+      let adv_max_lsb = getLSB(adv_max);    // 01000000 (64)
+      let conn_min_msb = getMSB(conn_min);  // 01       (1)
+      let conn_min_lsb = getLSB(conn_min);  // 11100000 (224)
+      let conn_max_msb = getMSB(conn_max);  // 11       (3)
+      let conn_max_lsb = getLSB(conn_max);  // 00100000 (32)
+
+      console.log(adv_min_lsb, adv_max_lsb);
+
+      let checkSumAll = 8 + adv_min_msb + adv_min_lsb + adv_max_msb + adv_max_lsb
+        + conn_min_msb + conn_min_lsb + conn_max_msb + conn_max_lsb;
+      console.log(checkSumAll); // 460
+      let checkSum = getLSB(checkSumAll);
+      console.log(checkSum); // 01 11001100
+      let setting = [87, checkSum, 8, adv_min_msb, adv_min_lsb, adv_max_msb, adv_max_lsb,
+         conn_min_msb, conn_min_lsb, conn_max_msb, conn_max_lsb];
+      console.log(setting);
+      return c.writeValue(setting);
+    });
+}
+
+function getMSB(value) {
+  return (value >> 8) & 0xFF;
+}
+
+function getLSB(value) {
+  console.log(value);
+  let lsb1 = value % 256;
+  console.log("Mod: " + lsb1);
+  let lsb2 = value & 0b11111111;
+  console.log("And: " + lsb2);
+  let lsb3 = (value >>> 0).toString(2);
+  console.log("Shift: " + lsb1);
+  return lsb1;
+}
+
+/**
+ * @param {BluetoothRemoteGATTService} service 
+ * @returns {Promise<void>}
+ */
+function getConnectionInterval(service) {
+  // IMU sensor config characterisic
+  return service
+    .getCharacteristic("0xFF0B")
+    .then(
+      /**
+       * @param {BluetoothRemoteGATTCharacteristic} c 
+       * @returns {DataView}
+       */
+      (c) => { return c.readValue(); }
+    );
+}
 
 /**
  * @param {BluetoothRemoteGATTService} service 
@@ -168,9 +237,9 @@ const mainmenu = {
                 console.log("Still connected");
               } else {
                 console.log("Connection lost");
+                clearInterval();
                 E.showAlert("Disconnected!")
                   .then(() => {
-                    clearInterval();
                     E.showMenu(mainmenu);
                   });
               }
@@ -287,6 +356,45 @@ const eSenseMenu = {
         E.showAlert("No battery found")
           .then(() => E.showMenu(eSenseMenu));
       });
+  },
+  "Get Intervals" : () => {
+    E.showMessage("Waiting...");
+    getConnectionInterval(service)
+      .then((d) => {
+        console.log(d.buffer);
+        let advertising_min = (d.buffer[3] * 256 + d.buffer[4]) * 0.625;
+        let advertising_max = (d.buffer[5] * 256 + d.buffer[6]) * 0.625;
+        let connection_min = (d.buffer[7] * 256 + d.buffer[8]) * 1.25;
+        let connection_max = (d.buffer[9] * 256 + d.buffer[10]) * 1.25;
+        console.log("Advertising: " + advertising_min + "ms - " + advertising_max + "ms");
+        console.log("Connection: " + connection_min + "ms - " + connection_max + "ms");
+        E.showMessage(
+          "Advertising: " + advertising_min + "ms - " + advertising_max + "ms\n" + 
+          "Connection: " + connection_min + "ms - " + connection_max + "ms"
+        );
+        setTimeout(() => {
+          E.showMenu(eSenseMenu);
+        }, 2000)
+      })
+      .catch((err) => {
+        console.log(err);
+        E.showAlert("No Intervals found")
+          .then(() => E.showMenu(eSenseMenu));
+      });
+  },
+  "Set Conn Interval" : () => { 
+    E.showMessage("Waiting...");
+    setConnectionInterval(service)
+      .then(() => {
+        console.log("Set connection Interval");
+        E.showMessage("Connection Interval set");
+        setTimeout(() => {
+          E.showMenu(eSenseMenu);
+        }, 1500);
+      })
+      .catch((err) => {
+        console.log(err);
+      })
   },
   "Remove last recording" : () => {
     console.log("Removing files written at: " + startedAt);
@@ -458,4 +566,8 @@ function accelHandler(value) {
   //bangleAcMag.write(value.mag + "\n");
 }
 
+function startBuiltInStepCounter() {  
+  Bangle.on('step', (up) => {
+    console.log(up);
+  })
 }
