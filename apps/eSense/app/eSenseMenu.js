@@ -101,4 +101,8 @@ function eSenseStepDetection(data) {
     eSenseSteps++;
     eSenseLastTime = parseInt(Date.now());
   }
+  if (csv) {
+    let time = parseInt(Date.now()) - startedAt;
+    eSenseCSV.write("" + mag + "," + time + "\n");
+  }
 }

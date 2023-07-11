@@ -4,6 +4,12 @@ let gatt;
 let service;
 
 
+let startedAt = parseInt(Date.now());
+let csv = false;
+/** @type {StorageFile} */
+let bangleCSV;
+/** @type {StorageFile} */
+let eSenseCSV;
 
 let eSenseSteps = 0;
 let bangleSteps = 0;
@@ -49,6 +55,20 @@ let mainmenu = {
           if (v) tryToConnectESense();
           else E.showMenu(mainmenu);
         });
+    }
+  },
+  "Store Data": {
+    value : csv,
+    format : v => v ? "On" : "Off",
+    onchange : v => {
+      // open files for writing
+      if (v) {
+        let timestamp = parseInt(Date.now() / 1000)
+        eSenseCSV = require("Storage").open("eSense_" + timestamp + ".csv", "a");
+        bangleCSV = require("Storage").open("bangle_" + timestamp + ".csv", "a");
+      }
+      // the listener of bangle and eSense stores data in the files if true
+      csv = v;
     }
   },
   /*

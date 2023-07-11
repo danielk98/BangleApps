@@ -86,4 +86,8 @@ function bangleStepDetection(magnitude) {
       }
     }, 300) // wait for 200 seconds to check if the esense detected a step as well
   }
+  if (csv) {
+    let time = parseInt(Date.now()) - startedAt;
+    bangleCSV.write("" + magnitude + "," + time + "\n");
+  }
 }
