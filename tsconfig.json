@@ -16,7 +16,7 @@
     "emitDeclarationOnly": false,
     "removeComments": true,
     "noImplicitUseStrict": true, // disable "use strict"
-    "ignoreDeprecations": "5.0",
+    //"ignoreDeprecations": "5.0",
 
     "newLine": "lf",
     "noEmitHelpers": true, // we link to specific banglejs implementations
