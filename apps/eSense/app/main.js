@@ -126,7 +126,6 @@ function tryToConnectESense() {
               clearInterval();
               E.showAlert("Disconnected!")
                 .then(() => {
-                  activeMenu = mainmenu;
                   E.showMenu(mainmenu);
                 });
               }
