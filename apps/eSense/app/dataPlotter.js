@@ -131,16 +131,16 @@ function nom(filename) {
     console.log("Reached EOF, starting from Begin...");
     offset[filename] = 0;
   }
-  let eval = evalData[filename];
+  let evalD = evalData[filename];
   let avg = plotData[filename].slice(-slidingWindow).reduce((val1, val2) => val1+val2) / slidingWindow;
-  let normalized = avg / eval.normalizer;
-  if (!eval.peakDetected && normalized >= eval.mainThreshold) {
+  let normalized = avg / evalD.normalizer;
+  if (!evalD.peakDetected && normalized >= evalD.mainThreshold) {
     console.log(filename, 'peak reached');
-    eval.peakDetected = true;
+    evalD.peakDetected = true;
   }
-  else if (eval.peakDetected && normalized <= eval.lowThreshold) {
-    eval.steps++;
-    eval.peakDetected = false;
+  else if (evalD.peakDetected && normalized <= evalD.lowThreshold) {
+    evalD.steps++;
+    evalD.peakDetected = false;
     console.log(filename, 'full step');
   }
 }
