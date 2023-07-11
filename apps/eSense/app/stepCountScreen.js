@@ -1,6 +1,3 @@
-var Layout = require("Layout");
-require("Font4x5").add(Graphics);
-
 let bangleStatusColor = "#f00";
 let eSenseStatusColor = "#f00";
 
@@ -39,28 +36,32 @@ function fillStatusCircleEsense(l)
   g.fillCircle(l.x, l.y, 4);
 }
 
-// basic layout for the step count screen
-let layout = new Layout( {
-  type:"v", c: [
-    {type:"h", c: [
-      {type:"v", bgCol:"#444444", c:[
-        {type:"h", c:[
-          {type:"txt", font:"4x5:2", label:"BANGLE", fillx:3, filly:1, col:"#fff"},
-          {type:"custom", render: fillStatusCircleBangle, fillx:1}
+function loadLayout() {
+  var Layout = require("Layout");
+  require("Font4x5").add(Graphics);
+  // basic layout for the step count screen
+  return new Layout( {
+    type:"v", c: [
+      {type:"h", c: [
+        {type:"v", bgCol:"#444444", c:[
+          {type:"h", c:[
+            {type:"txt", font:"4x5:2", label:"BANGLE", fillx:3, filly:1, col:"#fff"},
+            {type:"custom", render: fillStatusCircleBangle, fillx:1}
+          ]},
+          {type:"txt", font:"4x5:4", label: 0, fillx:1, filly:2, col:"#fff", id:'bangle'}
         ]},
-        {type:"txt", font:"4x5:4", label: 0, fillx:1, filly:2, col:"#fff", id:'bangle'}
-      ]},
-      {type:"v",  bgCol:"#808080", c:[
-        {type:"h", c:[
-          {type:"txt", font:"4x5:2", label:"ESENSE", fillx:3, filly:1, col:"#fff"},
-          {type:"custom", render: fillStatusCircleEsense, fillx:1}
+        {type:"v",  bgCol:"#808080", c:[
+          {type:"h", c:[
+            {type:"txt", font:"4x5:2", label:"ESENSE", fillx:3, filly:1, col:"#fff"},
+            {type:"custom", render: fillStatusCircleEsense, fillx:1}
+          ]},
+          {type:"txt", font:"4x5:4", label: 0, fillx:1, filly:2, col:"#fff", id:"esense"}
         ]},
-        {type:"txt", font:"4x5:4", label: 0, fillx:1, filly:2, col:"#fff", id:"esense"}
       ]},
-    ]},
-    {type:"v", bgCol:"#000", c:[
-        {type:"txt", font:"4x5:2", label:"ACCURATE STEPS",  fillx:1, filly:1, col:"#fff"},
-        {type:"txt", font:"4x5:4", label: 0,  fillx:1, filly:2, col:"#fff", id: "combined"}
-      ]},
-  ]
-});
+      {type:"v", bgCol:"#000", c:[
+          {type:"txt", font:"4x5:2", label:"ACCURATE STEPS",  fillx:1, filly:1, col:"#fff"},
+          {type:"txt", font:"4x5:4", label: 0,  fillx:1, filly:2, col:"#fff", id: "combined"}
+        ]},
+    ]
+  });
+}

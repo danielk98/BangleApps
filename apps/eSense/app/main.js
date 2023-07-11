@@ -39,6 +39,7 @@ let mainmenu = {
     g.clear();
     switchStatusColor();
     updateSteps();
+    let layout = loadLayout();
     layout.render();
     setWatch(() => {
       clearInterval();
