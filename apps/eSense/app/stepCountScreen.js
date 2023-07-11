@@ -1,3 +1,6 @@
+require("Font4x5").add(Graphics);
+var Layout = require("Layout");
+
 let bangleStatusColor = "#f00";
 let eSenseStatusColor = "#f00";
 
@@ -37,8 +40,6 @@ function fillStatusCircleEsense(l)
 }
 
 function loadLayout() {
-  var Layout = require("Layout");
-  require("Font4x5").add(Graphics);
   // basic layout for the step count screen
   return new Layout( {
     type:"v", c: [
