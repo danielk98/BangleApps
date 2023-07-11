@@ -8,6 +8,7 @@ const uglify = require('gulp-uglify');
 //var jsFiles = ['src/main.js', 'src/bangle.js', 'src/eSense.js', 'src/helper.js'];
 var jsFiles = [
     'app/stepCountScreen.js',
+    //'app/dataPlotter.js',
     'app/main.js',
     'app/bangleMenu.js',
     'app/eSenseMenu.js',
@@ -28,3 +29,17 @@ gulp.task('default', function() {
         .pipe(gulp.dest(jsDest));
 });
 
+
+var plotterFiles = [
+    'app/dataPlotter.js',
+    'app/main.js',
+];
+
+gulp.task('plotter', function() {
+    return gulp.src(plotterFiles)
+        .pipe(concat('plotter.js'))
+        .pipe(gulp.dest(jsDest))
+        .pipe(rename('plotter.min.js'))
+        .pipe(uglify())
+        .pipe(gulp.dest(jsDest));
+});

@@ -27,6 +27,14 @@ let mainmenu = {
     title: " - Main Menu - ",
     fontHeight: 20,
   },
+  "Data Plotter": () => {
+    drawAccelPlot();    
+    setWatch(() => {
+      g.clear();
+      clearInterval();
+      E.showMenu(mainmenu);
+    }, BTN1, {repeat: false});
+  },
   "Show Steps": () => {
     g.clear();
     switchStatusColor();
@@ -184,5 +192,24 @@ function updateSteps() {
   layout.combined.label = combinedSteps;
 }
 
+// check if running on emulator or Bangle
+let emulator = false;
+try {
+  NRF.setScan(() => {});
+}
+catch(e) {
+  emulator = true;
+}
+// remove Data Plotter if running on Bangle
+if (emulator) {
+  console.log("Runs in Emulator.");
+  delete mainmenu["eSense Config"];
+  delete mainmenu["Bangle Config"];
+  delete mainmenu["Store Data"];
+}
+else {
+  console.log("Runs on Bangle.");
+  delete mainmenu["Data Plotter"];
+}
 
 E.showMenu(mainmenu);
