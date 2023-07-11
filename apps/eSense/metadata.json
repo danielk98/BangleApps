@@ -1,4 +1,5 @@
-{ "id": "eSense",
+{
+  "id": "eSense",
   "name": "ESense",
   "shortName":"ESense",
   "icon": "eSense.png",
