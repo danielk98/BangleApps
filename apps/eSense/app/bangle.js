@@ -80,11 +80,11 @@ function bangleStepDetection(magnitude) {
     console.log(bangleSteps);
     const timestamp = parseInt(Date.now());
     setTimeout(() => {
-      if (Math.abs(timestamp - eSenseLastTime) < 400) {
+      if (Math.abs(timestamp - eSenseLastTime) < 600) {
         combinedSteps++;
         console.log("accuarate step", combinedSteps);
       }
-    }, 300) // wait for 200 seconds to check if the esense detected a step as well
+    }, 500) // wait for 500 miliseconds to check if the esense detected a step as well
   }
   if (csv) {
     let time = parseInt(Date.now()) - startedAt;

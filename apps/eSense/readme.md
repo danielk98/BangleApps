@@ -2,7 +2,7 @@
 The application in the concatenated form runs only on the Bangle.js 2 (high memory usage).
 Eitherway the BLE of the Bangle.js 2 guarantees a much more robust connection than the Bangle.js 1.
 
-### Compontents
+### Components
 The app provides follwing components:
 - Displaying the detected steps from the Bangle.js, the eSense and the combined steps (only counted if the data of both devices imply a step in the same time frame)
 - Basic config of Bangle.js Acceleration sensor (turn on/off, sample rate, sensitivity)

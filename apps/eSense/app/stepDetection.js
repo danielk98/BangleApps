@@ -4,9 +4,9 @@ const slidingWindowSize = 3;
 let bangleDetectionSet = {
   name: "Bangle.js",
   slidingWindow: [],
-  basement: 2, // variable
-  mainThreshold: 2.25, // higher than basement (1 + 0.3)
-  lowThreshold: 2, // lower than basement (1 - 0.1)
+  basement: 1, // variable
+  mainThreshold: 1.25, // higher than basement (1 + 0.3)
+  lowThreshold: 0.99, // lower than basement (1 - 0.1)
   peakDetected: false
 }
 
