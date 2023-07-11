@@ -7,12 +7,14 @@ const uglify = require('gulp-uglify');
 //script paths
 //var jsFiles = ['src/main.js', 'src/bangle.js', 'src/eSense.js', 'src/helper.js'];
 var jsFiles = [
+    'app/stepCountScreen.js',
     'app/main.js',
     'app/bangleMenu.js',
     'app/eSenseMenu.js',
     'app/bangle.js',
     'app/eSense.js',
     'app/eSenseHelper.js',
+    'app/stepDetection.js',
 ];
 let jsDest = 'out';
 

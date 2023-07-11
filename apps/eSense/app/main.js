@@ -5,6 +5,11 @@ let service;
 
 
 
+let eSenseSteps = 0;
+let bangleSteps = 0;
+let combinedSteps = 0;
+let eSenseLastTime = 0; // timestamp
+
 let rssi;
 let bangleAccelActive = false;
 let eSenseListenerActive = false;
@@ -15,6 +20,21 @@ let mainmenu = {
   "" : {
     title: " - Main Menu - ",
     fontHeight: 20,
+  },
+  "Show Steps": () => {
+    g.clear();
+    switchStatusColor();
+    updateSteps();
+    layout.render();
+    setWatch(() => {
+      clearInterval();
+      E.showMenu(mainmenu);
+    }, BTN1, {repeat: false});
+    setInterval(() => {
+      switchStatusColor();
+      updateSteps();
+      layout.render();
+    }, 1000);
   },
   "Bangle Config": () => {
     E.showMenu(bangleMenu);
@@ -134,3 +154,15 @@ function disconnectESense() {
   }
   E.showMenu(mainmenu);
 }
+
+/**
+ * Update the step values of the stepCountScreen
+ */
+function updateSteps() {
+  layout.bangle.label = bangleSteps;
+  layout.esense.label = eSenseSteps;
+  layout.combined.label = combinedSteps;
+}
+
+
+E.showMenu(mainmenu);

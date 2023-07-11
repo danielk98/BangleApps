@@ -66,5 +66,24 @@ function pollAccelData(hz) {
  * @param {AccelData} data 
  */
 function accelHandler(data) {
-  console.log("Bangle: " + "x: " + data.x + " y: " + data.y + " z:" + data.z);
+  //console.log("Bangle: " + "x: " + data.x + " y: " + data.y + " z:" + data.z);
+  bangleStepDetection(data.mag);
+}
+
+/** Trigger the step detection method for the acceleration data
+ * 
+ * @param {number} magnitude 
+ */
+function bangleStepDetection(magnitude) {
+  if (calculateSteps(magnitude, bangleDetectionSet)) {
+    bangleSteps++;
+    console.log(bangleSteps);
+    const timestamp = parseInt(Date.now());
+    setTimeout(() => {
+      if (Math.abs(timestamp - eSenseLastTime) < 400) {
+        combinedSteps++;
+        console.log("accuarate step", combinedSteps);
+      }
+    }, 300) // wait for 200 seconds to check if the esense detected a step as well
+  }
 }

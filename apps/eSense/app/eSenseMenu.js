@@ -75,7 +75,7 @@ function startListener(errorCallback) {
   setSensorConfig(service, eSenseSampleRate)
     .then(() => {
       // sets the event listener
-      setSensorListener(service, dataCb)
+      setSensorListener(service, eSenseStepDetection)
         .then(() => {
           console.log("Started listener");
           E.showMenu(eSenseMenu);
@@ -91,7 +91,14 @@ function startListener(errorCallback) {
     });
 }
 
-function dataCb(data) {
-  console.log("Data received");
+/** Trigger the step detection method for the received data
+ * 
+ * @param {*} data 
+ */
+function eSenseStepDetection(data) {
+  let mag = getMagnitude(data);
+  if (calculateSteps(mag, eSenseDetectionSet)) {
+    eSenseSteps++;
+    eSenseLastTime = parseInt(Date.now());
+  }
 }
-
