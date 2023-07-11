@@ -17,3 +17,6 @@ Concatenation of the source code into one file is done with gulp task runner (es
 
 - "gulp" -> Generate default app.js containing everything to run in
 - "gulp plotter" -> generate a version that includes the data plotter to run even in the Bangle.js 1 emulator
+
+### Start the app
+The app can currently only be launched from the Espruino IDE.
