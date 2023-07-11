@@ -1,3 +1,4 @@
+var _ = "";
 require("Font4x5").add(Graphics);
 var Layout = require("Layout");
 

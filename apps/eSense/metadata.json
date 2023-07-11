@@ -5,11 +5,12 @@
   "icon": "eSense.png",
   "version":"0.01",
   "description": "An app that allows to connect the Bangle with the eSense headphones via bluetooth. It also provides a combined step detection for more accurate step tracking data.",
+  "type": "app",
   "tags": "",
   "supports": ["BANGLEJS","BANGLEJS2"],
   "readme": "readme.md",
   "storage": [
-    {"name":"eSense.app.js","url":"app.min.js"},
+    {"name":"eSense.app.js","url":"app.js"},
     {"name":"eSense.img","url":"app-icon.js","evaluate":true}
   ]
 }
