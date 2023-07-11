@@ -38,8 +38,8 @@ let mainmenu = {
   "Show Steps": () => {
     g.clear();
     switchStatusColor();
-    updateSteps();
     let layout = loadLayout();
+    updateSteps(layout);
     layout.render();
     setWatch(() => {
       clearInterval();
@@ -47,7 +47,7 @@ let mainmenu = {
     }, BTN1, {repeat: false});
     setInterval(() => {
       switchStatusColor();
-      updateSteps();
+      updateSteps(layout);
       layout.render();
     }, 1000);
   },
@@ -186,7 +186,7 @@ function disconnectESense() {
 /**
  * Update the step values of the stepCountScreen
  */
-function updateSteps() {
+function updateSteps(layout) {
   layout.bangle.label = bangleSteps;
   layout.esense.label = eSenseSteps;
   layout.combined.label = combinedSteps;
