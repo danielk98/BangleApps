@@ -5,7 +5,7 @@ const rename = require('gulp-rename');
 const uglify = require('gulp-uglify');
 
 //script paths
-//var jsFiles = ['src/main.js', 'src/bangle.js', 'src/eSense.js', 'src/helper.js'];
+//var recordingAppFiles = ['src_recording/main.js', 'src_recording/bangle.js', 'src_recording/eSense.js', 'src_recording/helper.js'];
 var jsFiles = [
     'app/stepCountScreen.js',
     //'app/dataPlotter.js',
